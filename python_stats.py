@@ -50,8 +50,26 @@ class Stats:
 
     return cov / (std_X * std_Y)
 
+  def confidence_interval(self, da, a_few=1.96):
+    yes_ans = 0
+    n = len(da)
+    for i in da:
+        if i[1]:
+            yes_ans += 1
+    
+    p_hat = yes_ans / n
+    compute_error = lambda x: sqrt((x*(1-x)) / n)
+    error = compute_error(p_hat)
+    
+    pos = p_hat + a_few * error
+    neg = p_hat - a_few * error
+
+    return pos, neg
+
+
 if __name__ == "__main__":
   stats = Stats()
   X = [1,2,3,4,5,6,7,8,9,10]
   Y = [7,6,5,4,5,6,7,8,9,10]
-  print(stats.correlation(X,Y))
+  da = [["Jose", 0], ["Esteban", 1], ["Pepe", 1], ["Ernesto", 1], ["Tio", 0], ["Carmen", 1], ["idio", 1], ["Ro", 0], ["jose", 1]]
+  print(stats.confidence_interval(da))
